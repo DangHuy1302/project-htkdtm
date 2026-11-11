@@ -1,6 +1,6 @@
-# Hướng Dẫn Nộp Mã Nguồn Và Báo Cáo Đồ Án (Hệ Thống Kinh Doanh Thương Mại)
+# Hướng Dẫn Nộp Mã Nguồn Và Báo Cáo Đồ Án (Hệ Thống Kinh Doanh Thông Minh)
 
-Kho lưu trữ này được thiết lập để quản lý và thu thập mã nguồn, báo cáo đồ án của các nhóm sinh viên học phần Hệ Thống Kinh Doanh Thương Mại (HTKDTM). Sinh viên thực hiện tham gia, phát triển và nộp bài thông qua hệ thống Git và GitHub theo đúng các quy chuẩn kỹ thuật được mô tả dưới đây.
+Kho lưu trữ này được thiết lập để quản lý và thu thập mã nguồn, báo cáo đồ án của các nhóm sinh viên học phần Hệ Thống Kinh Doanh Thông Minh (HTKDTM). Sinh viên thực hiện tham gia, phát triển và nộp bài thông qua hệ thống Git và GitHub theo đúng các quy chuẩn kỹ thuật được mô tả dưới đây.
 
 ---
 
