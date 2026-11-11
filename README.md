@@ -39,26 +39,33 @@ Mỗi nhóm sinh viên bắt buộc phải tạo duy nhất một thư mục ri�
   - Nhóm 02 lớp DHTI15A2HN: `nhom02-dhti15a2hn`
   - Nhóm 05 lớp CNTT1: `nhom05-cntt1`
 
-### 2.3. Lệnh tạo và xuất bản nhánh nhóm lên GitHub
-Nhóm trưởng (hoặc đại diện nhóm) tạo nhánh từ nhánh `main` mới nhất và đẩy nhánh lên GitHub:
+### 2.3. Quy trình Fork và tạo nhánh nhóm
+Sinh viên không có quyền ghi (Write) trực tiếp vào kho lưu trữ gốc. Mỗi nhóm thực hiện theo mô hình Fork và Pull Request:
+1. Nhóm trưởng thực hiện **Fork** kho lưu trữ gốc `https://github.com/oanhcuongdo/project-htkdtm` về tài khoản GitHub cá nhân (nút **Fork** trên giao diện GitHub).
+2. Nhóm trưởng thêm các thành viên làm Collaborator của kho Fork (Settings, Collaborators) để cùng đẩy mã nguồn lên nhánh nhóm.
+3. Nhóm trưởng clone kho Fork, khai báo kho gốc là `upstream` và tạo nhánh riêng của nhóm:
 ```bash
-# 1. Chuyển về nhánh main và lấy mã nguồn mới nhất
-git checkout main
-git pull origin main
+# 1. Clone kho Fork của nhóm trưởng
+git clone https://github.com/<github-nhom-truong>/project-htkdtm.git
+cd project-htkdtm
 
-# 2. Tạo và chuyển sang nhánh riêng của nhóm
+# 2. Khai báo kho gốc là upstream
+git remote add upstream https://github.com/oanhcuongdo/project-htkdtm.git
+
+# 3. Tạo và chuyển sang nhánh riêng của nhóm từ main mới nhất
+git checkout main
+git pull upstream main
 git checkout -b <ten-nhom>-<ten-lop>
 
-# 3. Đẩy nhánh riêng của nhóm lên kho lưu trữ GitHub
+# 4. Đẩy nhánh riêng của nhóm lên kho Fork
 git push -u origin <ten-nhom>-<ten-lop>
 ```
 *Ví dụ cụ thể:*
 ```bash
-git checkout main
-git pull origin main
 git checkout -b nhom01-dhti15a1hn
 git push -u origin nhom01-dhti15a1hn
 ```
+*Lưu ý:* Trong mô hình này, `origin` là kho Fork của nhóm, `upstream` là kho gốc của giảng viên. Lệnh `git push` tới `upstream` bị từ chối (403) và không được sử dụng.
 
 ### 2.4. Quy trình đồng bộ giữa các thành viên trong cùng một nhóm
 Các thành viên trong cùng một nhóm cộng tác trên nhánh của nhóm mình theo các bước:
@@ -135,7 +142,7 @@ Mọi sinh viên trước khi thực hiện thao tác mã nguồn cần hoàn t�
 
 ### 5.1. Chuẩn bị tài khoản GitHub
 - Mỗi sinh viên cần có một tài khoản GitHub cá nhân đang hoạt động.
-- Gửi tài khoản GitHub (Username) cho giảng viên hoặc nhóm trưởng để được cấp quyền cộng tác (Collaborator) hoặc thực hiện theo luồng Fork.
+- Gửi tài khoản GitHub (Username) cho nhóm trưởng để được thêm làm Collaborator của kho Fork nhóm (xem mục 2.3).
 
 ### 5.2. Cấu hình định danh tác giả trên máy cục bộ
 Để lịch sử commit ghi nhận chính xác danh tính sinh viên, mở Terminal / Git Bash và thiết lập:
@@ -146,9 +153,12 @@ git config --global user.email "email_sinh_vien@example.com"
 *Lưu ý:* `email_sinh_vien@example.com` phải trùng khớp với email đã đăng ký trên tài khoản GitHub.
 
 ### 5.3. Lấy mã nguồn dự án về máy cục bộ
+- **Nhóm trưởng:** thực hiện theo mục 2.3 (Fork, clone kho Fork, thêm `upstream`).
+- **Thành viên:** clone kho Fork của nhóm trưởng sau khi chấp nhận lời mời Collaborator:
 ```bash
-git clone https://github.com/oanhcuongdo/project-htkdtm.git
+git clone https://github.com/<github-nhom-truong>/project-htkdtm.git
 cd project-htkdtm
+git checkout --track origin/<ten-nhom>-<ten-lop>
 ```
 
 ---
@@ -170,7 +180,7 @@ cd project-htkdtm
 #### Bước 1: Chuyển sang nhánh riêng của nhóm và đồng bộ mới nhất
 ```bash
 git checkout <ten-nhom>-<ten-lop>
-git pull origin <ten-nhom>-<ten-lop>
+git pull origin <ten-nhom>-<ten-lop>   # origin = kho Fork của nhóm
 ```
 
 #### Bước 2: Tạo thư mục nhóm và sao chép biểu mẫu danh sách (nếu chưa có)
@@ -228,15 +238,17 @@ Cú pháp thông điệp commit: `<loại-thay-đổi>(<tennhom-tenlop>): <mô-t
 - `docs`: Cập nhật tài liệu, tệp danhsachnhom.md.
 
 #### Bước 7: Đẩy nhánh lên GitHub (Push)
-Đẩy nhánh lên remote repository:
+Đẩy nhánh lên kho Fork của nhóm (`origin`):
 ```bash
 git push origin <ten-nhom>-<ten-lop>
 ```
 *Ví dụ:* `git push origin nhom01-dhti15a1hn`
 
-#### Bước 8: Mở Pull Request (PR) về nhánh `main` khi nộp bài
-1. Truy cập vào kho lưu trữ: `https://github.com/oanhcuongdo/project-htkdtm`.
-2. Chọn **Compare & pull request** cho nhánh nhóm `<ten-nhom>-<ten-lop>`.
+#### Bước 8: Mở Pull Request (PR) từ kho Fork về nhánh `main` của kho gốc khi nộp bài
+1. Truy cập kho Fork của nhóm trên GitHub, chọn nhánh `<ten-nhom>-<ten-lop>`.
+2. Chọn **Contribute** rồi **Open pull request** (hoặc **Compare & pull request**). Thiết lập:
+   - base repository: `oanhcuongdo/project-htkdtm`, base: `main`.
+   - head repository: kho Fork của nhóm, compare: `<ten-nhom>-<ten-lop>`.
 3. Kiểm tra mục **Files changed** (Các tệp thay đổi): Đảm bảo 100% đường dẫn tệp đều có tiền tố `<tennhom-tenlop>/...`.
 4. Đặt tiêu đề Pull Request:
    ```text
@@ -265,11 +277,12 @@ git pull --rebase origin <ten-nhom>-<ten-lop>
 git push origin <ten-nhom>-<ten-lop>
 ```
 
-### 7.3. Giữ nhánh nhóm luôn cập nhật với nhánh `main` mới nhất
+### 7.3. Giữ nhánh nhóm luôn cập nhật với nhánh `main` của kho gốc
 ```bash
 git checkout <ten-nhom>-<ten-lop>
-git fetch origin
-git merge origin/main
+git fetch upstream
+git merge upstream/main
+git push origin <ten-nhom>-<ten-lop>
 ```
 
 ---
@@ -278,7 +291,7 @@ git merge origin/main
 
 | STT | Tiêu chí kiểm tra | Yêu cầu kỹ thuật | Trạng thái |
 | :-: | :--- | :--- | :-: |
-| 1 | Nhánh làm việc riêng | Làm việc 100% trên nhánh riêng `<ten-nhom>-<ten-lop>`, không commit trực tiếp vào `main`. | Bắt buộc |
+| 1 | Nhánh làm việc riêng | Làm việc 100% trên nhánh riêng `<ten-nhom>-<ten-lop>` của kho Fork, không commit trực tiếp vào `main`. | Bắt buộc |
 | 2 | Cú pháp tên thư mục | Đúng định dạng `<tennhom-tenlop>`, toàn bộ chữ thường, không dấu, không khoảng trắng. | Bắt buộc |
 | 3 | Vị trí tệp tin | 100% tệp tin của nhóm nằm trọn vẹn trong thư mục `<tennhom-tenlop>/`. | Bắt buộc |
 | 4 | Tệp `danhsachnhom.md` | Có mặt tại thư mục gốc của nhóm, điền đầy đủ thông tin thành viên và phân công. | Bắt buộc |
