@@ -14,7 +14,6 @@ Mỗi nhóm sinh viên bắt buộc phải tạo duy nhất một thư mục ri�
   - Nhóm 01 lớp DHTI15A1HN: `nhom01-dhti15a1hn`
   - Nhóm 02 lớp DHTI15A2HN: `nhom02-dhti15a2hn`
   - Nhóm 05 lớp CNTT1: `nhom05-cntt1`
-  - Nhóm 08 lớp 65HTTT: `nhom08-65httt`
 
 ### 1.2. Ràng buộc kỹ thuật về tên thư mục
 - Toàn bộ ký tự viết thường (lowercase).
