@@ -1,301 +1,107 @@
-# Hướng Dẫn Nộp Mã Nguồn Và Báo Cáo Đồ Án (Hệ Thống Kinh Doanh Thông Minh)
+# CafeFlow Market BI — Nhóm 8
 
-Kho lưu trữ này được thiết lập để quản lý và thu thập mã nguồn, báo cáo đồ án của các nhóm sinh viên học phần Hệ Thống Kinh Doanh Thông Minh (HTKDTM). Sinh viên thực hiện tham gia, phát triển và nộp bài thông qua hệ thống Git và GitHub theo đúng các quy chuẩn kỹ thuật được mô tả dưới đây.
+Học phần: Hệ thống Kinh doanh thông minh  
+Giảng viên hướng dẫn: TS. Đỗ Oanh Cường  
+Nhóm: `nhom08-65httt`
 
----
+## 1. Trạng thái dự án
 
-## 1. Quy Chuẩn Đặt Tên Thư Mục Nhóm
+Dự án đang ở giai đoạn chuẩn bị triển khai. Kho nhóm hiện chứa đề cương, phân công và các tài liệu đặc tả ban đầu. Tài liệu này mô tả phạm vi, kiến trúc và cách tổ chức dự kiến; chưa xác nhận hệ thống web, API, collector, kho dữ liệu, dashboard, AI hoặc lịch n8n chạy hoàn chỉnh.
 
-Mỗi nhóm sinh viên bắt buộc phải tạo duy nhất một thư mục riêng biệt tại cấp cao nhất (root) của kho lưu trữ.
+Hướng dẫn cài đặt và câu lệnh khởi chạy sẽ được bổ sung sau khi nhóm có mã nguồn và kiểm chứng môi trường. Không dùng các mục dự kiến bên dưới như minh chứng chức năng đã hoàn thành.
 
-### 1.1. Cấu trúc định danh thư mục
-- **Cú pháp quy định:** `<ten-nhom>-<ten-lop>`
-- **Ví dụ chuẩn:**
-  - Nhóm 01 lớp DHTI15A1HN: `nhom01-dhti15a1hn`
-  - Nhóm 02 lớp DHTI15A2HN: `nhom02-dhti15a2hn`
-  - Nhóm 05 lớp CNTT1: `nhom05-cntt1`
-  - Nhóm 08 lớp 65HTTT: `nhom08-65httt`
+## 2. Giới thiệu
 
-### 1.2. Ràng buộc kỹ thuật về tên thư mục
-- Toàn bộ ký tự viết thường (lowercase).
-- Không sử dụng ký tự tiếng Việt có dấu.
-- Không sử dụng dấu khoảng trắng (space).
-- Các thành phần được phân tách duy nhất bằng dấu gạch ngang (`-`).
-- Không sử dụng các ký tự đặc biệt khác (`@`, `#`, `$`, `%`, `&`, `_`, `/`, `\`).
+CafeFlow Market BI là hệ thống thu thập và phân tích thị trường cà phê đa nguồn, hỗ trợ người phụ trách thu mua của một cơ sở rang xay theo dõi giá, tỷ giá, tin ngành, lập kịch bản chi phí và xử lý cảnh báo.
 
----
+Bối cảnh cơ sở rang xay được dùng để thiết kế bài tập; nhóm chưa xác nhận có dữ liệu giao dịch nội bộ hoặc đã khảo sát doanh nghiệp. Hệ thống hỗ trợ người dùng rà soát thông tin, không tự quyết định mua hay đặt lệnh giao dịch.
 
-## 2. Quy Chuẩn Tạo Và Quản Lý Nhánh Riêng Biệt Cho Từng Nhóm (Branching Strategy)
+## 3. Luồng nghiệp vụ dự kiến
 
-Để đảm bảo tính độc lập và tránh xung đột mã nguồn giữa các nhóm, quy định về phân nhánh (branching) được áp dụng bắt buộc như sau:
+1. Thu thập giá, tỷ giá và tin ngành theo nguồn đã xác minh.
+2. Lưu dữ liệu gốc, thời điểm hiệu lực, thời điểm thu thập và thông tin nguồn.
+3. Chuẩn hóa, chống trùng, kiểm tra chất lượng và cách ly bản ghi nghi lỗi.
+4. Nạp dữ liệu hợp lệ vào kho chung và cung cấp view phục vụ BI.
+5. Theo dõi thị trường, kế hoạch thu mua và chất lượng dữ liệu trên dashboard.
+6. Nhập khối lượng, ngân sách, chọn quan sát giá/tỷ giá để tính chi phí tham chiếu.
+7. Tạo cảnh báo theo quy tắc; người dùng xác nhận, cập nhật trạng thái và ghi hành động.
+8. AI hỗ trợ phân tích tin và diễn giải bản tin có dẫn nguồn; số liệu và điều kiện cảnh báo do mã xác định tính toán.
 
-### 2.1. Quy tắc phân nhánh cốt lõi
-- **Tuyệt đối cấm commit hoặc push trực tiếp vào nhánh `main`:** Nhánh `main` là nhánh tích hợp cuối cùng của học phần, chỉ được cập nhật thông qua Pull Request sau khi giảng viên kiểm duyệt và nghiệm thu.
-- **Mỗi nhóm bắt buộc phải có một nhánh làm việc riêng:** Toàn bộ quá trình phát triển mã nguồn, tải tài liệu và cập nhật tiến độ của nhóm phải được thực hiện trên nhánh riêng của nhóm đó.
+## 4. Phạm vi dự kiến
 
-### 2.2. Cú pháp định danh nhánh nhóm
-- **Cú pháp chuẩn:** `<ten-nhom>-<ten-lop>` (trùng khớp với tên thư mục của nhóm để đồng bộ quản lý).
-- **Ví dụ chuẩn:**
-  - Nhóm 01 lớp DHTI15A1HN: `nhom01-dhti15a1hn`
-  - Nhóm 02 lớp DHTI15A2HN: `nhom02-dhti15a2hn`
-  - Nhóm 05 lớp CNTT1: `nhom05-cntt1`
+| Hạng mục | Nội dung |
+| --- | --- |
+| Thu thập và ETL | Collector Python cho nguồn PDF, HTML, XML và RSS/chuyên mục tin; raw, chuẩn hóa, chống trùng, kiểm tra lỗi và truy vết |
+| Kho dữ liệu | PostgreSQL, fact/dimension và view KPI thống nhất |
+| BI | Ba dashboard: thị trường, kế hoạch thu mua, chất lượng dữ liệu; tối thiểu 10 biểu đồ/bảng tổng cộng theo đề cương |
+| Nghiệp vụ | Kế hoạch, kịch bản chi phí, cảnh báo, trạng thái và lịch sử xử lý |
+| Giao diện | Trang tin, chi tiết tin, kế hoạch và xử lý cảnh báo bằng Django template |
+| AI | Trích sự kiện/chủ đề và tạo bản tin có bằng chứng, có kiểm tra đầu ra |
+| Môi trường | Django/Wagtail, Superset, n8n, PostgreSQL và Docker Compose |
 
-### 2.3. Quy trình Fork và tạo nhánh nhóm
-Sinh viên không có quyền ghi (Write) trực tiếp vào kho lưu trữ gốc. Mỗi nhóm thực hiện theo mô hình Fork và Pull Request:
-1. Nhóm trưởng thực hiện **Fork** kho lưu trữ gốc `https://github.com/oanhcuongdo/project-htkdtm` về tài khoản GitHub cá nhân (nút **Fork** trên giao diện GitHub).
-2. Nhóm trưởng thêm các thành viên làm Collaborator của kho Fork (Settings, Collaborators) để cùng đẩy mã nguồn lên nhánh nhóm.
-3. Nhóm trưởng clone kho Fork, khai báo kho gốc là `upstream` và tạo nhánh riêng của nhóm:
-```bash
-# 1. Clone kho Fork của nhóm trưởng
-git clone https://github.com/<github-nhom-truong>/project-htkdtm.git
-cd project-htkdtm
+Không thuộc MVP: POS, giỏ hàng, luật gợi ý combo, tự động đặt lệnh mua hoặc hệ thống ERP/CRM đầy đủ. Dự báo, chatbot và MCP chỉ là mở rộng có điều kiện; chưa ghi nhận đã triển khai.
 
-# 2. Khai báo kho gốc là upstream
-git remote add upstream https://github.com/oanhcuongdo/project-htkdtm.git
+## 5. Nguồn dữ liệu dự kiến và giới hạn
 
-# 3. Tạo và chuyển sang nhánh riêng của nhóm từ main mới nhất
-git checkout main
-git pull upstream main
-git checkout -b <ten-nhom>-<ten-lop>
+| Nguồn | Dữ liệu dự kiến | Điểm cần xác minh |
+| --- | --- | --- |
+| ICO | Báo cáo PDF giá chỉ báo cà phê | Quyền sử dụng, parser nhiều tháng; giá chỉ báo không phải giá kỳ hạn |
+| Giacaphe | Bảng giá và giá kỳ hạn theo từng hợp đồng | Đơn vị, thời điểm, tính đầy đủ; ghi rõ nguồn công bố lại |
+| Vietcombank | XML tỷ giá USD/VND | Tách loại mua/bán và thời điểm hiệu lực; lịch sử có thể chưa đủ |
+| Nguồn tin ngành | Giacaphe, VietnamBiz và nguồn bổ sung phù hợp | Điều khoản, quyền lưu nội dung, độ liên quan, trùng tin và tần suất |
 
-# 4. Đẩy nhánh riêng của nhóm lên kho Fork
-git push -u origin <ten-nhom>-<ten-lop>
-```
-*Ví dụ cụ thể:*
-```bash
-git checkout -b nhom01-dhti15a1hn
-git push -u origin nhom01-dhti15a1hn
-```
-*Lưu ý:* Trong mô hình này, `origin` là kho Fork của nhóm, `upstream` là kho gốc của giảng viên. Lệnh `git push` tới `upstream` bị từ chối (403) và không được sử dụng.
+Khảo sát tải mẫu trong đề cương không đồng nghĩa collector đã vận hành ổn định. Nguồn, quyền và khả năng truy cập phải được xác minh khi triển khai. Nếu nguồn lỗi, chỉ dùng dữ liệu gần nhất với nhãn thời điểm rõ ràng, không giả dữ liệu mới.
 
-### 2.4. Quy trình đồng bộ giữa các thành viên trong cùng một nhóm
-Các thành viên trong cùng một nhóm cộng tác trên nhánh của nhóm mình theo các bước:
-1. Lấy danh sách nhánh mới nhất từ GitHub:
-   ```bash
-   git fetch origin
-   ```
-2. Chuyển sang làm việc trên nhánh của nhóm:
-   ```bash
-   git checkout --track origin/<ten-nhom>-<ten-lop>
-   ```
-   *(Trường hợp đã có nhánh cục bộ, chỉ cần chạy: `git checkout <ten-nhom>-<ten-lop>`)*
-3. Trước khi bắt đầu viết mã hoặc thêm tệp, luôn kéo dữ liệu mới nhất của nhóm về:
-   ```bash
-   git pull origin <ten-nhom>-<ten-lop>
-   ```
-4. Đẩy kết quả công việc sau khi commit lên nhánh nhóm:
-   ```bash
-   git push origin <ten-nhom>-<ten-lop>
-   ```
+## 6. Công nghệ dự kiến
 
----
+| Thành phần | Công nghệ | Vai trò |
+| --- | --- | --- |
+| Backend và quản trị | Python, Django, Wagtail | API, nghiệp vụ, tài khoản/quyền và quản trị |
+| Giao diện ứng dụng | Django template, HTML/CSS/JavaScript khi cần | Trang tin, kế hoạch và xử lý cảnh báo |
+| Dữ liệu | PostgreSQL, SQL | Raw, kho dữ liệu, bảng nghiệp vụ và view BI |
+| Dashboard | Apache Superset | Phân tích, bộ lọc và trực quan hóa |
+| Điều phối | n8n | Gọi collector, ETL và tác vụ theo lịch |
+| AI | LLM qua API, nhà cung cấp/model chờ chốt | Trích sự kiện và bản tin có căn cứ |
+| Đóng gói | Docker Compose | Môi trường các dịch vụ |
+| Cộng tác | Git/GitHub | Phiên bản, phân công và kiểm tra thay đổi |
 
-## 3. Quy Chuẩn Cấu Trúc Thư Mục Của Nhóm
+## 7. Tổ chức thư mục
 
-Toàn bộ tài liệu, thông tin thành viên và mã nguồn của nhóm phải nằm trọn vẹn bên trong thư mục của nhóm mình. Cấu trúc tổ chức tệp tin yêu cầu như sau:
+Các đường dẫn dưới đây đều tính từ thư mục nhóm `nhom08-65httt/`.
 
-```text
-project-htkdtm/
-├── .gitignore
-├── README.md
-├── _template_nhom/
-│   └── danhsachnhom.md
-└── <tennhom-tenlop>/
-    ├── danhsachnhom.md        # Tệp bắt buộc: Thông tin thành viên và phân công
-    ├── README.md              # (Tùy chọn) Hướng dẫn cài đặt, chạy hệ thống của nhóm
-    ├── docs/                  # Thư mục chứa tài liệu đặc tả, báo cáo đồ án (PDF/DOCX)
-    │   └── baocao_doan.pdf
-    └── src/                   # Thư mục chứa toàn bộ mã nguồn của dự án
-        ├── backend/
-        ├── frontend/
-        └── database/
-```
+| Đường dẫn | Mục đích |
+| --- | --- |
+| `danhsachnhom.md` | Thông tin thành viên, nhiệm vụ và đóng góp |
+| `README.md` | Giới thiệu và trạng thái dự án của nhóm; bổ sung hướng dẫn chạy khi đã kiểm chứng |
+| `docs/` | Đề cương, đặc tả, tài liệu kiểm thử và báo cáo |
+| `src/backend/` | Mã nguồn backend và tác vụ Python khi triển khai |
+| `src/frontend/` | Tài nguyên/giao diện khi nhóm chốt vị trí triển khai |
+| `src/database/` | SQL, mô hình dữ liệu và tài nguyên CSDL khi triển khai |
 
-### Yêu cầu bắt buộc đối với tệp tin `danhsachnhom.md`:
-- Tệp tin phải được đặt trực tiếp tại cấp cao nhất của thư mục nhóm: `<tennhom-tenlop>/danhsachnhom.md`.
-- Sử dụng mẫu có sẵn tại thư mục `_template_nhom/danhsachnhom.md`.
-- Nội dung tệp tin phải bao gồm đầy đủ:
-  - Thông tin tên đề tài, lớp học phần.
-  - Bảng danh sách thành viên: Số thứ tự, Họ và tên, Mã sinh viên, Lớp sinh hoạt, Vai trò (Nhóm trưởng / Thành viên), Nhiệm vụ phân công, Tỷ lệ đóng góp (%), Email.
-  - Hướng dẫn thiết lập môi trường và các bước khởi chạy mã nguồn của nhóm.
+Thư mục có `.gitkeep` chỉ là chỗ giữ cấu trúc, không chứng minh đã có mã nguồn. Vị trí Django template thực tế sẽ chốt khi khởi tạo ứng dụng để tránh lưu trùng với frontend.
 
----
+## 8. Tài liệu liên quan
 
-## 4. Quy Định Về Quản Lý Mã Nguồn Và Tệp Tin
+- [Danh sách và phân công nhóm](danhsachnhom.md)
+- [Đề cương CafeFlow Market BI](docs/De_cuong_CafeFlow_Market_BI_Nhom8.docx)
+- [Đặc tả dashboard dự kiến](docs/dac-ta-dashboard.md)
+- [Đặc tả giao diện tin và cảnh báo dự kiến](docs/dac-ta-tin-va-canh-bao.md)
 
-1. **Phạm vi thao tác:**
-   - Mỗi nhóm chỉ được phép thêm mới, chỉnh sửa các tệp tin nằm trong thư mục của nhóm mình (`<tennhom-tenlop>/`).
-   - Nghiêm cấm chỉnh sửa, đổi tên hoặc xóa các tệp tin, thư mục của các nhóm khác.
-   - Không chỉnh sửa tệp tin gốc của kho lưu trữ (`README.md`, `.gitignore`, `_template_nhom/`), trừ trường hợp có thông báo từ giảng viên.
+Hai tài liệu đặc tả có thể được bổ sung bằng các commit riêng; liên kết chỉ mở được sau khi tệp tương ứng được đưa lên nhánh nhóm.
 
-2. **Các tệp tin tuyệt đối không đưa lên kho lưu trữ (đã được cấu hình trong `.gitignore`):**
-   - Thư mục thư viện, gói phụ thuộc: `node_modules/`, `venv/`, `env/`, `vendor/`, `packages/`.
-   - Tệp tin cấu hình bảo mật cục bộ: `.env`, `.env.local`, file chứa mật khẩu, API key cá nhân.
-   - Thư mục biên dịch và tệp nhị phân: `dist/`, `build/`, `bin/`, `obj/`, `target/`, `out/`, `*.exe`, `*.dll`.
-   - Tệp bộ nhớ tạm của IDE/OS: `.vscode/`, `.idea/`, `__pycache__/`, `*.pyc`, `.DS_Store`, `Thumbs.db`.
-   - Tệp nén dung lượng lớn: `*.zip`, `*.rar`, `*.tar.gz`, `*.7z` (nếu cần chia sẻ tài nguyên lớn, hãy sử dụng Google Drive/OneDrive và đính kèm liên kết trong tài liệu).
+## 9. Quy tắc làm việc
 
----
+- Làm việc trên nhánh `nhom08-65httt` và chỉ thêm/sửa tệp bên trong thư mục `nhom08-65httt/`.
+- Giữ nguyên `README.md`, `.gitignore` và `_template_nhom/` ở gốc kho theo hướng dẫn học phần.
+- Pull bản mới trước khi sửa; chỉ stage đúng tệp phụ trách và kiểm tra trước khi commit.
+- Mỗi thành viên tự kiểm tra nội dung và commit bằng danh tính của mình. Không dùng số commit thay cho đánh giá chất lượng công việc.
+- Không đưa `.env`, mật khẩu, API key, thư viện cài sẵn hoặc tệp nén lớn vào kho.
+- Khi bàn giao, ghi rõ phần đã làm, chưa làm, phụ thuộc và đường dẫn minh chứng.
 
-## 5. Hướng Dẫn Cấu Hình Và Tham Gia Dự Án Dành Cho Sinh Viên
+## 10. Công việc tiếp theo
 
-Mọi sinh viên trước khi thực hiện thao tác mã nguồn cần hoàn tất các bước chuẩn bị sau:
-
-### 5.1. Chuẩn bị tài khoản GitHub
-- Mỗi sinh viên cần có một tài khoản GitHub cá nhân đang hoạt động.
-- Gửi tài khoản GitHub (Username) cho nhóm trưởng để được thêm làm Collaborator của kho Fork nhóm (xem mục 2.3).
-
-### 5.2. Cấu hình định danh tác giả trên máy cục bộ
-Để lịch sử commit ghi nhận chính xác danh tính sinh viên, mở Terminal / Git Bash và thiết lập:
-```bash
-git config --global user.name "Họ và Tên Sinh Viên"
-git config --global user.email "email_sinh_vien@example.com"
-```
-*Lưu ý:* `email_sinh_vien@example.com` phải trùng khớp với email đã đăng ký trên tài khoản GitHub.
-
-### 5.3. Lấy mã nguồn dự án về máy cục bộ
-- **Nhóm trưởng:** thực hiện theo mục 2.3 (Fork, clone kho Fork, thêm `upstream`).
-- **Thành viên:** clone kho Fork của nhóm trưởng sau khi chấp nhận lời mời Collaborator:
-```bash
-git clone https://github.com/<github-nhom-truong>/project-htkdtm.git
-cd project-htkdtm
-git checkout --track origin/<ten-nhom>-<ten-lop>
-```
-
----
-
-## 6. Quy Chuẩn Commit Và Push Mã Nguồn Vào Đúng Thư Mục Nhóm
-
-Để đảm bảo không ảnh hưởng đến mã nguồn của nhóm khác và giữ cấu trúc kho lưu trữ chuẩn xác, sinh viên phải tuân thủ nghiêm ngặt quy trình dưới đây.
-
-### 6.1. Quy tắc an toàn bắt buộc khi thao tác tệp
-- **Chỉ làm việc bên trong thư mục nhóm:** Mọi tệp tin mới tạo hoặc sửa đổi bắt buộc phải nằm trong đường dẫn `<tennhom-tenlop>/`.
-- **Không sử dụng lệnh `git add .` ở thư mục gốc:** Thao tác này dễ vô tình đưa cả các tệp ngoài ý muốn hoặc tệp của nhóm khác vào commit.
-- **Luôn chỉ định cụ thể thư mục nhóm khi `git add`:**
-  ```bash
-  git add <tennhom-tenlop>/
-  ```
-
-### 6.2. Trình tự các bước thực hiện commit và push
-
-#### Bước 1: Chuyển sang nhánh riêng của nhóm và đồng bộ mới nhất
-```bash
-git checkout <ten-nhom>-<ten-lop>
-git pull origin <ten-nhom>-<ten-lop>   # origin = kho Fork của nhóm
-```
-
-#### Bước 2: Tạo thư mục nhóm và sao chép biểu mẫu danh sách (nếu chưa có)
-Nếu nhóm chưa có thư mục trên kho lưu trữ:
-1. Tạo thư mục:
-   ```bash
-   mkdir nhom01-dhti15a1hn
-   ```
-2. Sao chép tệp `danhsachnhom.md` từ thư mục mẫu:
-   - Trên Linux/macOS:
-     ```bash
-     cp _template_nhom/danhsachnhom.md nhom01-dhti15a1hn/danhsachnhom.md
-     ```
-   - Trên Windows PowerShell:
-     ```powershell
-     Copy-Item -Path _template_nhom\danhsachnhom.md -Destination nhom01-dhti15a1hn\danhsachnhom.md
-     ```
-3. Mở tệp `nhom01-dhti15a1hn/danhsachnhom.md`, điền đầy đủ và chính xác thông tin các thành viên.
-
-#### Bước 3: Thêm mã nguồn và tài liệu vào thư mục nhóm
-Sao chép toàn bộ thư mục `src/`, `docs/` vào đúng vị trí:
-```text
-nhom01-dhti15a1hn/
-├── danhsachnhom.md
-├── docs/
-└── src/
-```
-
-#### Bước 4: Kiểm tra trạng thái tệp tin bằng `git status`
-Trước khi đưa tệp vào staging, chạy lệnh kiểm tra:
-```bash
-git status
-```
-*Yêu cầu kiểm tra:* Danh sách tệp hiển thị ở mục `Untracked files` hoặc `Changes not staged for commit` bắt buộc chỉ bắt đầu bằng `<tennhom-tenlop>/`. Nếu xuất hiện tệp ở ngoài thư mục nhóm, phải di chuyển tệp về đúng vị trí trước khi tiếp tục.
-
-#### Bước 5: Đưa tệp vào khu vực theo dõi (Staging Area)
-Chỉ định rõ ràng thư mục nhóm:
-```bash
-git add nhom01-dhti15a1hn/
-```
-
-Kiểm tra lại lần nữa để đảm bảo chỉ có tệp của nhóm được stage:
-```bash
-git status
-```
-
-#### Bước 6: Thực hiện commit
-Commit với thông điệp rõ ràng, tuân thủ cấu trúc chuẩn:
-```bash
-git commit -m "feat(nhom01-dhti15a1hn): nop ma nguon backend va danh sach nhom"
-```
-Cú pháp thông điệp commit: `<loại-thay-đổi>(<tennhom-tenlop>): <mô-tả-ngắn-gọn>`
-- `feat`: Thêm chức năng mới, mã nguồn mới.
-- `fix`: Sửa lỗi mã nguồn.
-- `docs`: Cập nhật tài liệu, tệp danhsachnhom.md.
-
-#### Bước 7: Đẩy nhánh lên GitHub (Push)
-Đẩy nhánh lên kho Fork của nhóm (`origin`):
-```bash
-git push origin <ten-nhom>-<ten-lop>
-```
-*Ví dụ:* `git push origin nhom01-dhti15a1hn`
-
-#### Bước 8: Mở Pull Request (PR) từ kho Fork về nhánh `main` của kho gốc khi nộp bài
-1. Truy cập kho Fork của nhóm trên GitHub, chọn nhánh `<ten-nhom>-<ten-lop>`.
-2. Chọn **Contribute** rồi **Open pull request** (hoặc **Compare & pull request**). Thiết lập:
-   - base repository: `oanhcuongdo/project-htkdtm`, base: `main`.
-   - head repository: kho Fork của nhóm, compare: `<ten-nhom>-<ten-lop>`.
-3. Kiểm tra mục **Files changed** (Các tệp thay đổi): Đảm bảo 100% đường dẫn tệp đều có tiền tố `<tennhom-tenlop>/...`.
-4. Đặt tiêu đề Pull Request:
-   ```text
-   [Nộp bài] <tennhom-tenlop> - <Tên đề tài>
-   ```
-5. Nhấn **Create pull request** để giảng viên đánh giá và phê duyệt.
-
----
-
-## 7. Xử Lý Các Sự Cố Kỹ Thuật Thường Gặp
-
-### 7.1. Xử lý khi lỡ thêm (add) tệp nhầm ngoài thư mục nhóm
-Nếu chạy `git status` và thấy có tệp nằm ngoài thư mục nhóm đã bị đưa vào Staging:
-```bash
-# Hủy staging tệp bị nhầm
-git reset HEAD <duong-dan-tep-bi-nham>
-
-# Di chuyển tệp về đúng thư mục nhóm
-mv <duong-dan-tep> <tennhom-tenlop>/
-```
-
-### 7.2. Xử lý khi bị từ chối push (rejected - non-fast-forward)
-Khi có thành viên khác trong nhóm đã đẩy commit lên nhánh trước bạn:
-```bash
-git pull --rebase origin <ten-nhom>-<ten-lop>
-git push origin <ten-nhom>-<ten-lop>
-```
-
-### 7.3. Giữ nhánh nhóm luôn cập nhật với nhánh `main` của kho gốc
-```bash
-git checkout <ten-nhom>-<ten-lop>
-git fetch upstream
-git merge upstream/main
-git push origin <ten-nhom>-<ten-lop>
-```
-
----
-
-## 8. Danh Sách Kiểm Tra Trước Khi Nộp Bài (Checklist)
-
-| STT | Tiêu chí kiểm tra | Yêu cầu kỹ thuật | Trạng thái |
-| :-: | :--- | :--- | :-: |
-| 1 | Nhánh làm việc riêng | Làm việc 100% trên nhánh riêng `<ten-nhom>-<ten-lop>` của kho Fork, không commit trực tiếp vào `main`. | Bắt buộc |
-| 2 | Cú pháp tên thư mục | Đúng định dạng `<tennhom-tenlop>`, toàn bộ chữ thường, không dấu, không khoảng trắng. | Bắt buộc |
-| 3 | Vị trí tệp tin | 100% tệp tin của nhóm nằm trọn vẹn trong thư mục `<tennhom-tenlop>/`. | Bắt buộc |
-| 4 | Tệp `danhsachnhom.md` | Có mặt tại thư mục gốc của nhóm, điền đầy đủ thông tin thành viên và phân công. | Bắt buộc |
-| 5 | Kiểm soát tệp tin rác | Không commit `node_modules/`, `venv/`, `.env`, tệp tạm IDE, tệp nhị phân nén lớn. | Bắt buộc |
-| 6 | Lệnh `git add` | Luôn sử dụng `git add <tennhom-tenlop>/`, không `git add .` tại thư mục gốc. | Bắt buộc |
-| 7 | Tính toàn vẹn nhánh chung | Không sửa đổi, không xóa thư mục hoặc mã nguồn của các nhóm khác. | Bắt buộc |
+1. Xác minh nguồn/quyền, loại giá, trường dữ liệu và khả năng parser.
+2. Chốt mô hình dữ liệu, KPI, hợp đồng API và trạng thái cảnh báo.
+3. Khởi tạo môi trường và triển khai một luồng nhỏ có thể chạy kiểm tra.
+4. Bàn giao view/dữ liệu mẫu cho Trang, API/tài khoản mẫu cho Minh.
+5. Cập nhật hướng dẫn chạy, kết quả kiểm thử và tiến độ theo minh chứng thực tế.
