@@ -110,7 +110,12 @@ Nhóm chốt tên view/cột, grain và khóa nối trong từ điển dữ li�
 
 ## 9. Kế hoạch đối chiếu SQL
 
-Trang viết ba truy vấn SELECT sau khi tên view/cột đã được bàn giao. Tài liệu hiện chưa chứa SQL chạy thật.
+Trang đã chuẩn bị bộ truy vấn `SELECT` chỉ đọc dựa trên schema thực tế của luồng ICO (`market_source`, `raw_collection_run`, `raw_quality_issue`, `dw_price_series`, `dw_price_observation` trong `src/backend/market/models.py`):
+
+- [doi-chieu-kpi-ico.sql](../src/database/doi-chieu-kpi-ico.sql): đối chiếu KPI-01 (giá mới nhất hợp lệ), KPI-02 (hai quan sát liên tiếp và phần trăm biến động, trả `NULL` nếu thiếu mốc trước) và KPI-03 (độ mới dữ liệu theo `effective_date` tách với `collected_at`).
+- [kiem-tra-chat-luong-ico.sql](../src/database/kiem-tra-chat-luong-ico.sql): đối chiếu chuỗi thời gian `robustas` (TT03), kiểm tra chống trùng `is_current`, tỷ lệ hợp lệ theo lần chạy (CL02) và chi tiết dòng lỗi `raw_quality_issue` (CL03).
+
+Các truy vấn này sẵn sàng chạy trên PostgreSQL có dữ liệu ICO thật (chưa có minh chứng chạy thực tế trên máy chưa cài Docker/PostgreSQL).
 
 | Ca | Cách kiểm tra | Kết quả cần đạt |
 | --- | --- | --- |
