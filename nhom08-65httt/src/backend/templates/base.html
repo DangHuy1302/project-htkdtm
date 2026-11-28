@@ -11,13 +11,13 @@
   <a class="skip-link" href="#main-content">Đến nội dung chính</a>
   <div class="app-shell">
     <aside class="sidebar">
-      <a class="brand" href="{% url 'price-page' %}">
+      <a class="brand" href="{% url 'overview' %}">
         <span class="brand-mark" aria-hidden="true"></span>
         <span>CafeFlow <span class="brand-caption">Market BI</span></span>
       </a>
       <nav aria-label="Điều hướng chính">
         <ul class="nav-list">
-          <li><span class="nav-item nav-item--pending" aria-disabled="true">Tổng quan <small>Chưa mở</small></span></li>
+          <li><a class="nav-item" href="{% url 'overview' %}"{% if request.resolver_match.url_name == 'overview' %} aria-current="page"{% endif %}>Tổng quan</a></li>
           <li><a class="nav-item" href="{% url 'price-page' %}"{% if request.resolver_match.url_name == 'price-page' %} aria-current="page"{% endif %}>Thị trường</a></li>
           <li><span class="nav-item nav-item--pending" aria-disabled="true">Kế hoạch thu mua <small>Chưa mở</small></span></li>
           <li><span class="nav-item nav-item--pending" aria-disabled="true">Tin thị trường <small>Chưa mở</small></span></li>

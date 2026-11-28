@@ -38,7 +38,7 @@ Get-Content -LiteralPath .\database\kiem-tra-ico.sql |
 Invoke-RestMethod 'http://localhost:8000/api/v1/prices/?series=robustas'
 ```
 
-- Mở [trang giá](http://localhost:8000/) và [API JSON](http://localhost:8000/api/v1/prices/?format=json). Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
+- Với CF-002B.1 đã build, mở [Tổng quan](http://localhost:8000/) hoặc [Thị trường](http://localhost:8000/market/). Với bản đã push tại `d6d4601`, trang `/` mở bảng giá. [API JSON](http://localhost:8000/api/v1/prices/?format=json) dùng cùng đường dẫn ở cả hai bản. Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
 - Trên hai lần tải cùng nội dung, lần sau vẫn có run mới và số giá không đổi. Dòng chưa có giá trong PDF được bỏ qua. Dòng có giá nhưng không hợp lệ được ghi lý do; raw có thể tra theo run.
 - Có thể tạo tài khoản quản trị thử bằng `docker compose exec web python manage.py createsuperuser` và mở [Wagtail](http://localhost:8000/cms/).
 - `docker compose stop` dừng dịch vụ và giữ volume; `docker compose start` chạy lại. Cấu hình này dành cho chạy thử trên máy cá nhân.
