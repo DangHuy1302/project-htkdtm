@@ -6,7 +6,7 @@ Nhóm: `nhom08-65httt`
 
 ## 1. Trạng thái dự án
 
-Dự án có luồng đầu tiên cho giá chỉ báo ICO. Collector tải PDF và lưu raw, nhật ký cùng giá chuẩn hóa trong PostgreSQL. Django REST Framework và trang Django template đọc các bản hiện hành. [Kế hoạch triển khai và hợp đồng API](docs/ke-hoach-trien-khai.md) ghi rõ các phần dự kiến và điều kiện nghiệm thu R01–R17.
+Dự án có luồng giá chỉ báo ICO từ PDF qua PostgreSQL đến API và trang giá. Layout chung CF-002A nằm ở `d6d4601`. Trang Tổng quan và route Thị trường của CF-002B.1 đã được duyệt và commit tại `19c7b39` ngày 28/11/2026. [Nhật ký tiến độ](docs/tien-do-trien-khai.md) ghi SHA và minh chứng của từng mốc.
 
 ## Chạy luồng ICO trên Windows
 
@@ -38,7 +38,7 @@ Get-Content -LiteralPath .\database\kiem-tra-ico.sql |
 Invoke-RestMethod 'http://localhost:8000/api/v1/prices/?series=robustas'
 ```
 
-- Với CF-002B.1 đã build, mở [Tổng quan](http://localhost:8000/) hoặc [Thị trường](http://localhost:8000/market/). Với bản đã push tại `d6d4601`, trang `/` mở bảng giá. [API JSON](http://localhost:8000/api/v1/prices/?format=json) dùng cùng đường dẫn ở cả hai bản. Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
+- Từ CF-002B.1 (`19c7b39`), mở [Tổng quan](http://localhost:8000/), [Thị trường](http://localhost:8000/market/) hoặc [API JSON](http://localhost:8000/api/v1/prices/?format=json). Ở mốc CF-002A (`d6d4601`), trang `/` mở bảng giá. Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
 - Trên hai lần tải cùng nội dung, lần sau vẫn có run mới và số giá không đổi. Dòng chưa có giá trong PDF được bỏ qua. Dòng có giá nhưng không hợp lệ được ghi lý do; raw có thể tra theo run.
 - Có thể tạo tài khoản quản trị thử bằng `docker compose exec web python manage.py createsuperuser` và mở [Wagtail](http://localhost:8000/cms/).
 - `docker compose stop` dừng dịch vụ và giữ volume; `docker compose start` chạy lại. Cấu hình này dành cho chạy thử trên máy cá nhân.
@@ -116,11 +116,12 @@ Các đường dẫn dưới đây đều tính từ thư mục nhóm `nhom08-65
 - [Danh sách và phân công nhóm](danhsachnhom.md)
 - [Đề cương CafeFlow Market BI](docs/De_cuong_CafeFlow_Market_BI_Nhom8.docx)
 - [Kế hoạch triển khai, schema và hợp đồng API](docs/ke-hoach-trien-khai.md)
+- [Nhật ký tiến độ triển khai](docs/tien-do-trien-khai.md)
+- [Theo dõi nghiệm thu R01–R17](docs/theo-doi-nghiem-thu.md)
+- [Kịch bản demo CafeFlow](docs/kich-ban-demo.md)
 - [Kết quả kiểm tra luồng ICO](docs/kiem-chung-ico.md)
 - [Đặc tả dashboard dự kiến](docs/dac-ta-dashboard.md)
 - [Đặc tả giao diện tin và cảnh báo dự kiến](docs/dac-ta-tin-va-canh-bao.md)
-
-Hai tài liệu đặc tả có thể được bổ sung bằng các commit riêng; liên kết chỉ mở được sau khi tệp tương ứng được đưa lên nhánh nhóm.
 
 ## 9. Quy tắc làm việc
 

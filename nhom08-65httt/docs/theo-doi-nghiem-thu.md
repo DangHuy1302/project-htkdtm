@@ -33,7 +33,7 @@ Một mốc CF hoàn thành có thể cung cấp minh chứng cho một phần �
 | R16 | Mã nguồn và tài liệu | Thư mục nhóm, commit/PR; README, API, từ điển, workflow/dashboard xuất, báo cáo nguồn/test và danh mục lỗi còn mở. | Hiếu, Cả nhóm bổ sung | ĐL | Có [f63ee2e][ico], [d6d4601][layout], [19c7b39][overview], README, hợp đồng API giá và hồ sơ ICO. Bộ tài liệu CF-DOC-001 đã được duyệt. Còn thiếu bộ từ điển, workflow/dashboard xuất và hồ sơ kiểm thử đầy đủ. | 28/11/2026 |
 | R17 | Demo và nghiệm thu | 3 luồng đầu cuối có kết quả; ít nhất một luồng dùng giá thu thật; ca giả lập có nhãn; kiểm thử sai quyền, nguồn lỗi và nạp lặp. | Huy, Cả nhóm demo | ĐL | [Hồ sơ ICO](kiem-chung-ico.md) và [f63ee2e][ico] chứng minh một luồng dùng giá thật, nguồn lỗi và nạp lặp. [d6d4601][layout] bổ sung layout. CF-002B.1 tại [19c7b39][overview] đã kiểm tra tuyến UI ở preview. Còn thiếu hai luồng và ca sai quyền. | 28/11/2026 |
 
-Đối chiếu thêm [nhật ký tiến độ CF](tien-do-trien-khai.md) và kịch bản demo. Khi xác nhận một mã R, ghi ngày, người kiểm tra, môi trường/SHA và liên kết bằng chứng hoặc Issue/PR.
+Đối chiếu thêm [nhật ký tiến độ CF](tien-do-trien-khai.md) và [kịch bản demo](kich-ban-demo.md). Khi xác nhận một mã R, ghi ngày, người kiểm tra, môi trường/SHA và liên kết bằng chứng hoặc Issue/PR.
 
 [ico]: https://github.com/DangHuy1302/project-htkdtm/commit/f63ee2ea605ed86e9193c904015ef4fb6cc28a91
 [layout]: https://github.com/DangHuy1302/project-htkdtm/commit/d6d4601a0e5b886639fec5b584d8914d7c3dbbc7

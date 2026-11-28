@@ -7,7 +7,7 @@
 
 ## Nhiệm vụ và minh chứng
 
-Mã R trong bảng cho biết phạm vi mà nhiệm vụ đóng góp. Trạng thái của một nhiệm vụ CF được dùng để theo dõi công việc. Xem bảng nghiệm thu để biết từng mã R đã đáp ứng tới đâu.
+Mã R trong bảng cho biết phạm vi mà nhiệm vụ đóng góp. Trạng thái của một nhiệm vụ CF được dùng để theo dõi công việc. Xem [bảng nghiệm thu](theo-doi-nghiem-thu.md) để biết từng mã R đã đáp ứng tới đâu.
 
 | Nhiệm vụ | Phụ trách | Mã R liên quan | Nội dung | Trạng thái | Kiểm thử hoặc minh chứng | Commit/PR |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -17,7 +17,7 @@ Mã R trong bảng cho biết phạm vi mà nhiệm vụ đóng góp. Trạng th
 | CF-002B.1 | Bùi Đăng Huy | R16, R17 | Tổng quan tại `/`, chuyển bảng giá sang `/market/`, điều hướng bằng named URL. Có vùng dành cho KPI, diễn biến giá, tình trạng nguồn và phân hệ. | Đã kiểm thử, duyệt và commit | Hai trang trả 200, menu active đúng, CSS và tuyến CMS qua, Chrome ở 1440/390/320 px. Bốn phản hồi API trước/sau khớp từng byte. Xác nhận lại các URL bằng HTTP chỉ đọc trong CF-DOC-001. | [19c7b39](https://github.com/DangHuy1302/project-htkdtm/commit/19c7b399dd8eaa657a376664b0da993e8a0e749b) |
 | CF-002B.2–CF-002B.6 | Bùi Đăng Huy | R16, R17 | KPI ICO, biến động giá, tình trạng nguồn, biểu đồ và bộ kiểm thử tự động tổng quan. | Chưa triển khai trong phiên này | Thực hiện theo từng mốc sau khi nhóm trưởng xác nhận bắt đầu. | Chưa có |
 | CF-002C | Bùi Đăng Huy điều phối | R16, R17 | Khung bàn giao route/template cho các phân hệ. | Chưa triển khai trong phiên này | Chờ chốt điểm tích hợp với người phụ trách theo [phân công](../danhsachnhom.md). | Chưa có |
-| CF-DOC-001 | Bùi Đăng Huy review | R16, R17 | Nhật ký tiến độ, bảng nghiệm thu và kịch bản demo TH5. | Đã duyệt nội dung | Đối chiếu đề cương, Git, mã và hồ sơ kiểm thử. Kịch bản demo phân biệt bản chạy thông thường với preview. | Xem các commit tài liệu CF-DOC-001 trong lịch sử nhánh. |
+| CF-DOC-001 | Bùi Đăng Huy review | R16, R17 | Nhật ký tiến độ, bảng nghiệm thu và kịch bản demo TH5. | Đã duyệt nội dung | Đối chiếu đề cương, Git, mã và hồ sơ kiểm thử. [Kịch bản demo](kich-ban-demo.md) phân biệt bản chạy thông thường với preview. | Xem các commit tài liệu CF-DOC-001 trong lịch sử nhánh. |
 
 ## Nhật ký kỹ thuật
 
