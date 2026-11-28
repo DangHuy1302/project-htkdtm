@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "wagtail",
     "rest_framework",
     "market",
+    "accounts",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
