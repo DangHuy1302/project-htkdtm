@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Giá cà phê | CafeFlow Market BI</title>
+  <style>
+    body { margin: 0; color: #262018; background: #faf7f1; font: 1rem/1.55 system-ui, sans-serif; }
+    main { max-width: 72rem; margin: 3rem auto; padding: 0 1.25rem; }
+    h1 { margin: .25rem 0; line-height: 1.2; }
+    a { color: #295b43; }
+    .table { margin-top: 2rem; overflow-x: auto; background: white; border: 1px solid #ded6ca; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: .65rem .85rem; border-bottom: 1px solid #e9e2d8; }
+    th { background: #ede8df; }
+    .numeric { text-align: right; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+<main>
+  <p>CafeFlow Market BI</p>
+  <h1>Giá cà phê</h1>
+  <p>25 quan sát mới nhất theo ngày hiệu lực. Thời điểm thu thập hiển thị theo giờ Việt Nam.</p>
+  <a href="{% url 'price-list' %}?format=json">Xem dữ liệu JSON</a>
+  {% if prices %}
+    <div class="table" tabindex="0" aria-label="Bảng giá cà phê">
+      <table>
+        <thead><tr>
+          <th scope="col">Ngày hiệu lực</th><th scope="col">Chuỗi giá</th>
+          <th scope="col">Loại giá</th><th scope="col" class="numeric">Giá</th>
+          <th scope="col">Đơn vị</th><th scope="col">Nguồn</th><th scope="col">Thu thập</th>
+        </tr></thead>
+        <tbody>
+        {% for price in prices %}
+          <tr>
+            <td>{{ price.effective_date|date:"d/m/Y" }}</td>
+            <td>{{ price.series.name }}</td>
+            <td>{{ price.series.get_price_type_display }}</td>
+            <td class="numeric">{{ price.value|floatformat:"-4" }}</td>
+            <td>{% if price.series.unit == "usd_cent_per_lb" %}US cents/lb{% else %}{{ price.series.unit }}{% endif %}</td>
+            <td><a href="{{ price.run.source_url }}">{{ price.series.source.name }}</a></td>
+            <td>{{ price.run.collected_at|date:"d/m/Y H:i:s" }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p>Chưa có quan sát đã thu thập. Kiểm tra nhật ký collector sau khi chạy tác vụ ICO.</p>
+  {% endif %}
+</main>
+</body>
+</html>

@@ -6,9 +6,42 @@ Nhóm: `nhom08-65httt`
 
 ## 1. Trạng thái dự án
 
-Dự án đang ở giai đoạn chuẩn bị triển khai. Kho nhóm hiện chứa đề cương, phân công và các tài liệu đặc tả ban đầu. Tài liệu này mô tả phạm vi, kiến trúc và cách tổ chức dự kiến; chưa xác nhận hệ thống web, API, collector, kho dữ liệu, dashboard, AI hoặc lịch n8n chạy hoàn chỉnh.
+Dự án có luồng đầu tiên cho giá chỉ báo ICO. Collector tải PDF và lưu raw, nhật ký cùng giá chuẩn hóa trong PostgreSQL. Django REST Framework và trang Django template đọc các bản hiện hành. [Kế hoạch triển khai và hợp đồng API](docs/ke-hoach-trien-khai.md) ghi rõ các phần dự kiến và điều kiện nghiệm thu R01–R17.
 
-Hướng dẫn cài đặt và câu lệnh khởi chạy sẽ được bổ sung sau khi nhóm có mã nguồn và kiểm chứng môi trường. Không dùng các mục dự kiến bên dưới như minh chứng chức năng đã hoàn thành.
+## Chạy luồng ICO trên Windows
+
+Mở Docker Desktop ở chế độ Linux containers. Từ thư mục gốc repository, chạy trong PowerShell. Tạo `.env` một lần trước khi khởi động, rồi dùng lại tệp đó để giữ thông tin đăng nhập của volume.
+
+```powershell
+Set-Location .\nhom08-65httt\src
+if (-not (Test-Path -LiteralPath .env)) {
+    $cafeSecret = [Guid]::NewGuid().ToString('N') + [Guid]::NewGuid().ToString('N')
+    $cafeDbPassword = [Guid]::NewGuid().ToString('N')
+    (Get-Content -LiteralPath .env.example) |
+        ForEach-Object { $_ -replace '^DJANGO_SECRET_KEY=$', "DJANGO_SECRET_KEY=$cafeSecret" -replace '^POSTGRES_PASSWORD=$', "POSTGRES_PASSWORD=$cafeDbPassword" } |
+        Set-Content -LiteralPath .env -Encoding Ascii
+}
+docker compose config --quiet
+docker compose up -d --build
+docker compose logs web
+```
+
+Khi log web báo đang lắng nghe cổng 8000, chạy collector. Lệnh tháng lịch sử dùng định dạng `YYYY-MM` và chỉ chạy được với PDF lưu trữ có định dạng parser hỗ trợ.
+
+```powershell
+docker compose exec web python manage.py check
+docker compose exec web python manage.py collect_ico
+docker compose exec web python manage.py collect_ico
+docker compose exec web python manage.py collect_ico --month 2026-10
+Get-Content -LiteralPath .\database\kiem-tra-ico.sql |
+    docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
+Invoke-RestMethod 'http://localhost:8000/api/v1/prices/?series=robustas'
+```
+
+- Mở [trang giá](http://localhost:8000/) và [API JSON](http://localhost:8000/api/v1/prices/?format=json). Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
+- Trên hai lần tải cùng nội dung, lần sau vẫn có run mới và số giá không đổi. Dòng chưa có giá trong PDF được bỏ qua. Dòng có giá nhưng không hợp lệ được ghi lý do; raw có thể tra theo run.
+- Có thể tạo tài khoản quản trị thử bằng `docker compose exec web python manage.py createsuperuser` và mở [Wagtail](http://localhost:8000/cms/).
+- `docker compose stop` dừng dịch vụ và giữ volume; `docker compose start` chạy lại. Cấu hình này dành cho chạy thử trên máy cá nhân.
 
 ## 2. Giới thiệu
 
@@ -72,18 +105,18 @@ Các đường dẫn dưới đây đều tính từ thư mục nhóm `nhom08-65
 | Đường dẫn | Mục đích |
 | --- | --- |
 | `danhsachnhom.md` | Thông tin thành viên, nhiệm vụ và đóng góp |
-| `README.md` | Giới thiệu và trạng thái dự án của nhóm; bổ sung hướng dẫn chạy khi đã kiểm chứng |
+| `README.md` | Giới thiệu, trạng thái và hướng dẫn chạy |
 | `docs/` | Đề cương, đặc tả, tài liệu kiểm thử và báo cáo |
-| `src/backend/` | Mã nguồn backend và tác vụ Python khi triển khai |
-| `src/frontend/` | Tài nguyên/giao diện khi nhóm chốt vị trí triển khai |
-| `src/database/` | SQL, mô hình dữ liệu và tài nguyên CSDL khi triển khai |
-
-Thư mục có `.gitkeep` chỉ là chỗ giữ cấu trúc, không chứng minh đã có mã nguồn. Vị trí Django template thực tế sẽ chốt khi khởi tạo ứng dụng để tránh lưu trùng với frontend.
+| `src/backend/` | Django/Wagtail, API, migration, collector và template trong từng app |
+| `src/frontend/` | Thư mục giữ cấu trúc học phần |
+| `src/database/` | SQL đối chiếu và tài liệu BI |
 
 ## 8. Tài liệu liên quan
 
 - [Danh sách và phân công nhóm](danhsachnhom.md)
 - [Đề cương CafeFlow Market BI](docs/De_cuong_CafeFlow_Market_BI_Nhom8.docx)
+- [Kế hoạch triển khai, schema và hợp đồng API](docs/ke-hoach-trien-khai.md)
+- [Kết quả kiểm tra luồng ICO](docs/kiem-chung-ico.md)
 - [Đặc tả dashboard dự kiến](docs/dac-ta-dashboard.md)
 - [Đặc tả giao diện tin và cảnh báo dự kiến](docs/dac-ta-tin-va-canh-bao.md)
 
@@ -100,8 +133,6 @@ Hai tài liệu đặc tả có thể được bổ sung bằng các commit riê
 
 ## 10. Công việc tiếp theo
 
-1. Xác minh nguồn/quyền, loại giá, trường dữ liệu và khả năng parser.
-2. Chốt mô hình dữ liệu, KPI, hợp đồng API và trạng thái cảnh báo.
-3. Khởi tạo môi trường và triển khai một luồng nhỏ có thể chạy kiểm tra.
-4. Bàn giao view/dữ liệu mẫu cho Trang, API/tài khoản mẫu cho Minh.
-5. Cập nhật hướng dẫn chạy, kết quả kiểm thử và tiến độ theo minh chứng thực tế.
+1. Chốt quyền và điều kiện sử dụng nguồn, schema, KPI, API nghiệp vụ và trạng thái cảnh báo.
+2. Mở rộng ETL cho giá nội địa, kỳ hạn công bố lại, FX và tin. Bàn giao view BI cho Trang và API/tài khoản cho Minh.
+3. Triển khai kịch bản chi phí, cảnh báo và hành động xử lý, AI có dẫn chứng, rồi kiểm tra đầu cuối theo R17.
