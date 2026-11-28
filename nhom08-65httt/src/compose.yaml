@@ -27,6 +27,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       POSTGRES_HOST: db
       VCB_XML_URL: ${VCB_XML_URL:-https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx?b=10}
+      N8N_INTERNAL_TOKEN: ${N8N_INTERNAL_TOKEN:-}
     depends_on:
       db:
         condition: service_healthy
@@ -34,5 +35,27 @@ services:
       - "127.0.0.1:${DJANGO_PORT:-8000}:8000"
     command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000 --noreload"]
 
+  n8n:
+    image: n8nio/n8n:1.106.3
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      GENERIC_TIMEZONE: Asia/Ho_Chi_Minh
+      N8N_HOST: 127.0.0.1
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: http
+      N8N_SECURE_COOKIE: "false"
+      EXECUTIONS_DATA_SAVE_ON_ERROR: all
+      EXECUTIONS_DATA_SAVE_ON_SUCCESS: all
+      EXECUTIONS_DATA_PRUNE: "true"
+      EXECUTIONS_DATA_MAX_AGE: "336"
+    depends_on:
+      web:
+        condition: service_started
+    ports:
+      - "127.0.0.1:${N8N_PORT:-5678}:5678"
+    volumes:
+      - n8n-data:/home/node/.n8n
+
 volumes:
   postgres-data:
+  n8n-data:
