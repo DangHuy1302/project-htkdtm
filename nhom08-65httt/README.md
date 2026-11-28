@@ -17,8 +17,13 @@ Set-Location .\nhom08-65httt\src
 if (-not (Test-Path -LiteralPath .env)) {
     $cafeSecret = [Guid]::NewGuid().ToString('N') + [Guid]::NewGuid().ToString('N')
     $cafeDbPassword = [Guid]::NewGuid().ToString('N')
+    $cafeN8nToken = [Guid]::NewGuid().ToString('N') + [Guid]::NewGuid().ToString('N')
     (Get-Content -LiteralPath .env.example) |
-        ForEach-Object { $_ -replace '^DJANGO_SECRET_KEY=$', "DJANGO_SECRET_KEY=$cafeSecret" -replace '^POSTGRES_PASSWORD=$', "POSTGRES_PASSWORD=$cafeDbPassword" } |
+        ForEach-Object {
+            $_ -replace '^DJANGO_SECRET_KEY=$', "DJANGO_SECRET_KEY=$cafeSecret" `
+               -replace '^POSTGRES_PASSWORD=$', "POSTGRES_PASSWORD=$cafeDbPassword" `
+               -replace '^N8N_INTERNAL_TOKEN=$', "N8N_INTERNAL_TOKEN=$cafeN8nToken"
+        } |
         Set-Content -LiteralPath .env -Encoding Ascii
 }
 docker compose config --quiet
@@ -26,10 +31,14 @@ docker compose up -d --build
 docker compose logs web
 ```
 
-Khi log web báo đang lắng nghe cổng 8000, chạy collector. Lệnh tháng lịch sử dùng định dạng `YYYY-MM` và chỉ chạy được với PDF lưu trữ có định dạng parser hỗ trợ.
+*(Nếu đã có `.env` từ các mốc trước, bổ sung thêm `N8N_PORT=5678` và một chuỗi ngẫu nhiên cho `N8N_INTERNAL_TOKEN=` vào `.env` cũ, giữ nguyên `DJANGO_SECRET_KEY` và `POSTGRES_PASSWORD` của volume hiện tại.)*
+
+Khi log web báo đang lắng nghe cổng 8000, chạy kiểm tra, khởi tạo nhóm quyền và collector. Lệnh tháng lịch sử dùng định dạng `YYYY-MM` và chỉ chạy được với PDF lưu trữ có định dạng parser hỗ trợ.
 
 ```powershell
 docker compose exec web python manage.py check
+docker compose exec web python manage.py init_groups
+docker compose exec web python manage.py test accounts
 docker compose exec web python manage.py collect_ico
 docker compose exec web python manage.py collect_ico
 docker compose exec web python manage.py collect_ico --month 2026-10
@@ -46,7 +55,8 @@ Invoke-RestMethod 'http://localhost:8000/api/v1/exchange-rates/?currency=USD'
 - Từ CF-002B.1 (`19c7b39`), mở [Tổng quan](http://localhost:8000/), [Thị trường](http://localhost:8000/market/) hoặc [API JSON](http://localhost:8000/api/v1/prices/?format=json). Ở mốc CF-002A (`d6d4601`), trang `/` mở bảng giá. Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
 - Trên hai lần tải cùng nội dung, lần sau vẫn có run mới và số giá không đổi. Dòng chưa có giá trong PDF được bỏ qua. Dòng có giá nhưng không hợp lệ được ghi lý do; raw có thể tra theo run.
 - Collector Vietcombank đọc XML qua `collect_vcb`, lưu bản gốc và từng loại tỷ giá vào `dw_fx_observation`; chạy lặp để kiểm tra `unchanged_rates`. Trang tỷ giá ở `/market/exchange-rates/`; API hỗ trợ lọc `currency` và `rate_type`. Truy vấn chống trùng nằm trong `src/database/kiem-tra-vcb.sql`.
-- Có thể tạo tài khoản quản trị thử bằng `docker compose exec web python manage.py createsuperuser` và mở [Wagtail](http://localhost:8000/cms/).
+- Có thể tạo tài khoản quản trị thử bằng `docker compose exec web python manage.py createsuperuser` và mở [Wagtail](http://localhost:8000/cms/). Nhóm quyền mặc định `Admin` và `Analyst` được khởi tạo lặp lại không trùng bằng `docker compose exec web python manage.py init_groups`.
+- Dịch vụ `n8n` chạy ở `http://localhost:5678/` (đổi bằng `N8N_PORT` nếu trùng cổng) và lưu cấu hình/log qua volume `n8n-data`.
 - `docker compose stop` dừng dịch vụ và giữ volume; `docker compose start` chạy lại. Cấu hình này dành cho chạy thử trên máy cá nhân.
 
 ## 2. Giới thiệu
@@ -128,6 +138,7 @@ Các đường dẫn dưới đây đều tính từ thư mục nhóm `nhom08-65
 - [Kết quả kiểm tra luồng ICO](docs/kiem-chung-ico.md)
 - [Đặc tả dashboard dự kiến](docs/dac-ta-dashboard.md)
 - [Đặc tả giao diện tin và cảnh báo dự kiến](docs/dac-ta-tin-va-canh-bao.md)
+- [Đặc tả tích hợp n8n cho collector ICO](docs/dac-ta-tich-hop-n8n.md)
 
 ## 9. Quy tắc làm việc
 
