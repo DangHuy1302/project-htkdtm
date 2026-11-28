@@ -6,6 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}CafeFlow Market BI{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'cafeflow/layout.css' %}">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "CafeFlow Market BI",
+        "description": "Tra cứu giá cà phê và tỷ giá phục vụ theo dõi thị trường.",
+        "inLanguage": "vi"
+      },
+      {
+        "@type": "WebApplication",
+        "name": "CafeFlow Market BI",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Ứng dụng tra cứu giá cà phê và tỷ giá thị trường.",
+        "inLanguage": "vi"
+      }
+    ]
+  }
+  </script>
   {% block extra_head %}{% endblock %}
 </head>
 <body>

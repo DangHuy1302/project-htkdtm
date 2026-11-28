@@ -80,6 +80,8 @@ class VietcombankDeduplicationTests(TestCase):
 
         self.assertEqual(page.status_code, 200)
         self.assertContains(page, "USD")
+        self.assertContains(page, 'type="application/ld+json"')
+        self.assertContains(page, '"@type": "Dataset"')
         self.assertEqual(api.status_code, 200)
         response_rows = api.json()
         self.assertEqual(len(response_rows), 2)

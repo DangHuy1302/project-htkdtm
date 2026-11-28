@@ -3,7 +3,29 @@
 
 {% block title %}Tỷ giá Vietcombank | CafeFlow Market BI{% endblock %}
 {% block section_title %}Tỷ giá{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="{% static 'cafeflow/exchange-rates.css' %}">{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'cafeflow/exchange-rates.css' %}">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Tỷ giá Vietcombank | CafeFlow Market BI",
+    "description": "Bảng tỷ giá Vietcombank gồm giá mua tiền mặt, mua chuyển khoản và bán theo thời điểm công bố.",
+    "inLanguage": "vi",
+    "mainEntity": {
+      "@type": "Dataset",
+      "name": "Tỷ giá Vietcombank",
+      "description": "Các mức tỷ giá VND cho một đơn vị ngoại tệ, được chuẩn hóa từ XML Vietcombank.",
+      "variableMeasured": ["Mua tiền mặt", "Mua chuyển khoản", "Bán"],
+      "provider": {
+        "@type": "Organization",
+        "name": "Vietcombank",
+        "url": "https://www.vietcombank.com.vn/To-chuc/Doanh-Nghiep/KHTC---Ty-gia"
+      }
+    }
+  }
+  </script>
+{% endblock %}
 
 {% block content %}
   <header class="page-heading">
