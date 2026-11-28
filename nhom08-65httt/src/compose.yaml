@@ -16,7 +16,9 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   web:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in .env}
       DJANGO_DEBUG: "1"
@@ -24,6 +26,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-cafeflow}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       POSTGRES_HOST: db
+      VCB_XML_URL: ${VCB_XML_URL:-https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx?b=10}
     depends_on:
       db:
         condition: service_healthy

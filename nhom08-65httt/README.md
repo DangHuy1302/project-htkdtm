@@ -33,13 +33,19 @@ docker compose exec web python manage.py check
 docker compose exec web python manage.py collect_ico
 docker compose exec web python manage.py collect_ico
 docker compose exec web python manage.py collect_ico --month 2026-10
+docker compose exec web python manage.py collect_vcb
+docker compose exec web python manage.py collect_vcb
 Get-Content -LiteralPath .\database\kiem-tra-ico.sql |
     docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
+Get-Content -LiteralPath .\database\kiem-tra-vcb.sql |
+    docker compose exec -T db sh -c 'psql -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB"'
 Invoke-RestMethod 'http://localhost:8000/api/v1/prices/?series=robustas'
+Invoke-RestMethod 'http://localhost:8000/api/v1/exchange-rates/?currency=USD'
 ```
 
 - Từ CF-002B.1 (`19c7b39`), mở [Tổng quan](http://localhost:8000/), [Thị trường](http://localhost:8000/market/) hoặc [API JSON](http://localhost:8000/api/v1/prices/?format=json). Ở mốc CF-002A (`d6d4601`), trang `/` mở bảng giá. Dùng `DJANGO_PORT` nếu cổng 8000 đã được dùng.
 - Trên hai lần tải cùng nội dung, lần sau vẫn có run mới và số giá không đổi. Dòng chưa có giá trong PDF được bỏ qua. Dòng có giá nhưng không hợp lệ được ghi lý do; raw có thể tra theo run.
+- Collector Vietcombank đọc XML qua `collect_vcb`, lưu bản gốc và từng loại tỷ giá vào `dw_fx_observation`; chạy lặp để kiểm tra `unchanged_rates`. Trang tỷ giá ở `/market/exchange-rates/`; API hỗ trợ lọc `currency` và `rate_type`. Truy vấn chống trùng nằm trong `src/database/kiem-tra-vcb.sql`.
 - Có thể tạo tài khoản quản trị thử bằng `docker compose exec web python manage.py createsuperuser` và mở [Wagtail](http://localhost:8000/cms/).
 - `docker compose stop` dừng dịch vụ và giữ volume; `docker compose start` chạy lại. Cấu hình này dành cho chạy thử trên máy cá nhân.
 

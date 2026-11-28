@@ -107,3 +107,41 @@ class PriceObservation(models.Model):
         ]
         indexes = [models.Index(fields=["-effective_date", "id"], condition=Q(is_current=True),
                                 name="price_current_date_idx")]
+
+
+class ExchangeRateObservation(models.Model):
+    class RateType(models.TextChoices):
+        CASH_BUY = "cash_buy", "Mua tiền mặt"
+        TRANSFER_BUY = "transfer_buy", "Mua chuyển khoản"
+        SELL = "sell", "Bán"
+
+    source = models.ForeignKey(Source, on_delete=models.PROTECT)
+    run = models.ForeignKey(CollectionRun, on_delete=models.PROTECT)
+    currency_code = models.CharField(max_length=3)
+    currency_name = models.CharField(max_length=100)
+    rate_type = models.CharField(max_length=16, choices=RateType)
+    effective_at = models.DateTimeField()
+    value = models.DecimalField(max_digits=14, decimal_places=4)
+    revision = models.PositiveIntegerField(default=1)
+    is_current = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "dw_fx_observation"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["source", "currency_code", "rate_type", "effective_at", "revision"],
+                name="fx_revision_identity",
+            ),
+            models.UniqueConstraint(
+                fields=["source", "currency_code", "rate_type", "effective_at"],
+                condition=Q(is_current=True),
+                name="fx_one_current_revision",
+            ),
+            models.CheckConstraint(condition=Q(value__gt=0), name="fx_value_positive"),
+            models.CheckConstraint(condition=Q(revision__gte=1), name="fx_revision_positive"),
+        ]
+        indexes = [models.Index(
+            fields=["source", "currency_code", "rate_type", "-effective_at"],
+            condition=Q(is_current=True),
+            name="fx_current_latest_idx",
+        )]
