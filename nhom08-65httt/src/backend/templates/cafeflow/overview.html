@@ -15,9 +15,23 @@
   <section class="overview-section" aria-labelledby="market-kpis-title">
     <h2 id="market-kpis-title">KPI thị trường</h2>
     <div class="overview-grid">
-      <article class="card overview-panel">
-        <h3>Giá ICO gần nhất</h3>
-        <p class="overview-state">Chưa triển khai</p>
+      <article class="card overview-panel" aria-labelledby="ico-kpi-title">
+        <h3 id="ico-kpi-title">Giá ICO gần nhất</h3>
+        {% if ico_price %}
+          <p class="overview-kpi">
+            <strong>{{ ico_price.value|floatformat:"-4" }}</strong>
+            <span>{% if ico_price.unit == "usd_cent_per_lb" %}US cents/lb{% else %}{{ ico_price.unit }}{% endif %}</span>
+          </p>
+          <dl class="overview-kpi-meta">
+            <dt>Ngày hiệu lực</dt>
+            <dd><time datetime="{{ ico_price.effective_date|date:'Y-m-d' }}">{{ ico_price.effective_date|date:"d/m/Y" }}</time></dd>
+            <dt>Nguồn</dt>
+            <dd><a href="{{ ico_price.source_url }}">{{ ico_price.source_name }}</a></dd>
+          </dl>
+        {% else %}
+          <p class="overview-state">Chưa có dữ liệu</p>
+        {% endif %}
+        <p class="overview-state">Giá chỉ báo Robustas của ICO. Giá kỳ hạn ICE là một loại giá riêng.</p>
       </article>
       <article class="card overview-panel">
         <h3>Biến động giá</h3>
